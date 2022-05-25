@@ -192,4 +192,6 @@ if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 fi
 
-eval $(thefuck --alias)
+if [ -x `which thefuck` ]; then
+    eval $(thefuck --alias)
+fi
