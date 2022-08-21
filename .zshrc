@@ -212,3 +212,13 @@ zstyle ':vcs_info:*' stagedstr ' +'
 # Set the format of the Git information for vcs_info
 zstyle ':vcs_info:git:*' formats       '-%F{yellow}(%r@%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '-%F{yellow}(%r@%b|%a%u%c)'
+
+# --- gpg ---
+export GPG_TTY=$(tty)
+gpg-login() {
+    echo "" | gpg --clearsign > /dev/null 2>&1
+}
+
+gpg-logout() {
+    echo "RELOADAGENT" | gpg-connect-agent
+}
