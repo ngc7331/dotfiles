@@ -77,7 +77,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)──}(%B%F{%(#.red.blue)}%n%(#.*.@)%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]${vcs_info_msg_0_}\n%F{%(#.blue.green)}└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+    PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)──}(%B%F{%(#.red.blue)}%n%(#.*.@)%m%b%F{%(#.blue.green)}$CONDA_ENV)-[%B%F{reset}%(4~.%-2~/…/%2~.%3~)%b${vcs_info_msg_0_}%F{%(#.blue.green)}]\n%F{%(#.blue.green)}└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
     RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
 
     # enable syntax-highlighting
@@ -210,8 +210,8 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr ' +'
 # Set the format of the Git information for vcs_info
-zstyle ':vcs_info:git:*' formats       '-%F{yellow}(%r@%b%u%c)'
-zstyle ':vcs_info:git:*' actionformats '-%F{yellow}(%r@%b|%a%u%c)'
+zstyle ':vcs_info:git:*' formats       '%F{yellow}@%b%u%c'
+zstyle ':vcs_info:git:*' actionformats '%F{yellow}@%b|%a%u%c'
 
 # --- gpg ---
 export GPG_TTY=$(tty)
@@ -222,3 +222,23 @@ gpg-login() {
 gpg-logout() {
     echo "RELOADAGENT" | gpg-connect-agent
 }
+
+# --- conda ---
+# Determines prompt modifier if and when a conda environment is active
+precmd_conda_info() {
+  if [[ -n $CONDA_PREFIX ]]; then
+      if [[ $(basename $CONDA_PREFIX) == "miniconda3" ]]; then
+        # Without this, it would display conda version
+        CONDA_ENV="(base)"
+      else
+        # For all environments that aren't (base)
+        CONDA_ENV="($(basename $CONDA_PREFIX))"
+      fi
+  # When no conda environment is active, don't show anything
+  else
+    CONDA_ENV=""
+  fi
+}
+
+# Run the previously defined function before each prompt
+precmd_functions+=( precmd_conda_info )
