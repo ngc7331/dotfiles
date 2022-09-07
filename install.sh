@@ -21,6 +21,26 @@ install() {
     return 0
 }
 
+confirm() {
+    hint=$1
+    default=$2
+    read -p "$1 " choice
+    case $choice in
+    [yY][eE][sS] | [yY] )
+        return 0;;
+    [nN][oO] | [nN] )
+        echo "Abort"
+        exit 1;;
+    * ) case $default in
+        Y )
+            return 0;;
+        N )
+            echo "Abort"
+            exit 1;;
+        esac ;;
+    esac
+}
+
 zshrc() {
     # zsh
     if [ ! -x "`which zsh`" ]; then
@@ -30,11 +50,17 @@ zshrc() {
         fi
     fi
 
-    cp .zshrc ~/.zshrc
-    echo ".zshrc copied to ~/.zshrc"
+    if [ -f ~/.zshrc ]; then
+        confirm "~/.zshrc exists, override(y/N)?" N
+        cp -f ~/.zshrc ~/.zshrc.bak
+        echo "-> existing ~/.zshrc copied to ~/.zshrc.bak"
+    fi
 
-    echo 'run "chsh -s `which zsh`" to set your default shell'
-    echo 'run "source ~/.zshrc" or restart your terminal to use zsh'
+    cp -f .zshrc ~/.zshrc
+    echo "-> .zshrc copied to ~/.zshrc"
+
+    echo 'hint: run "chsh -s `which zsh`" to set your default shell'
+    echo 'hint: run "source ~/.zshrc" or restart your terminal to use zsh'
 }
 
 zshrc
