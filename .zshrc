@@ -77,7 +77,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)──}(%B%F{%(#.red.blue)}%n%(#.*.@)%m%b%F{%(#.blue.green)}$CONDA_ENV)-[%B%F{reset}%(4~.%-2~/…/%2~.%3~)%b${vcs_info_msg_0_}%F{%(#.blue.green)}]\n%F{%(#.blue.green)}└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+    PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)──}(%B%F{%(#.red.blue)}%n%(#.*.@)%m%b%F{%(#.blue.green)}$CONDA_ENV)-[%B%F{reset}%(4~.%-2~/…/%2~.%4~)%b${vcs_info_msg_0_}%F{%(#.blue.green)}]\n%F{%(#.blue.green)}└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
     RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
 
     # enable syntax-highlighting
