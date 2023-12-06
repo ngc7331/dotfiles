@@ -224,6 +224,23 @@ gpg-logout() {
 }
 
 # --- conda ---
+# try to add PATH & activate
+conda_dir="$(realpath ~)/anaconda3"
+if [ -d $conda_dir ]; then
+    conda_setup="$($conda_dir/bin/conda shell.zsh hook 2>/dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$conda_setup"
+    else
+        if [ -f "$conda_dir/etc/profile.d/conda.sh" ]; then
+            . "$conda_dir/etc/profile.d/conda.sh"
+        else
+            export PATH="$PATH:$conda_dir/bin"
+        fi
+    fi
+    unset conda_setup
+fi
+unset conda_dir
+
 # Determines prompt modifier if and when a conda environment is active
 precmd_conda_info() {
   if [[ -n $CONDA_PREFIX ]]; then
