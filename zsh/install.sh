@@ -16,7 +16,7 @@ echo "Installing modifies"
 cp -r .oh-my-zsh ~/
 
 echo "Updating ~/.zshrc"
-sed -i 's/ZSH_THEME=".*"/ZSH_THEME="fino-time-mod"/g' ~/.zshrc
+sed -i 's/^ZSH_THEME=".*"$/ZSH_THEME="fino-time-mod"/g' ~/.zshrc
 
 echo "Done"
 echo
