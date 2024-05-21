@@ -59,9 +59,15 @@ function prompt_char {
     echo "$"
 }
 
-PROMPT="
+function code_prompt_info {
+    echo "%(?.. $(__color 160 '%? ⨯'))"
+}
+
+PROMPT="\
 ╭─\$(user_prompt_info)\$(host_prompt_info)\$(path_prompt_info)\$(git_prompt_info)\$(pyvenv_prompt_info)\$(time_prompt_info)
 ╰─\$(prompt_char) "
+
+RPROMPT="\$(code_prompt_info)"
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" $(__dark on) %{$FG[${ZSH_THEME_COLOR_GIT}]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
