@@ -44,7 +44,7 @@ function path_prompt_info {
 }
 
 function time_prompt_info {
-    echo " $(__dark [) $(__color ${ZSH_THEME_COLOR_TIME} '%D - %*') $(__dark ])"
+    echo " $(__dark [)$(__color ${ZSH_THEME_COLOR_TIME} '%*')$(__dark ])"
 }
 
 function pyvenv_prompt_info {
