@@ -76,3 +76,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # disable python venv prompt
 VIRTUAL_ENV_DISABLE_PROMPT=true
+
+# timer plugin
+TIMER_FORMAT="[%d]"
+TIMER_PRECISION=2
+TIMER_THRESHOLD=1
