@@ -17,6 +17,7 @@ cp -r .oh-my-zsh ~/
 
 echo "Updating ~/.zshrc"
 sed -i 's/^ZSH_THEME=".*"$/ZSH_THEME="fino-time-mod"/g' ~/.zshrc
+sed -i 's/^plugins=\(.*\)$/plugins=(cp git gpg-agent timer)/g' ~/.zshrc
 
 echo "Done"
 echo
