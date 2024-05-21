@@ -6,14 +6,8 @@ if [ ! -d ~/.oh-my-zsh  ]; then
   exit 1
 fi
 
-echo "Updating oh-my-zsh"
-cd ~/.oh-my-zsh
-git reset --hard
-git pull
-cd - > /dev/null
-
-echo "Installing modifies"
-cp -r .oh-my-zsh ~/
+echo "Installing customs"
+cp -r ./custom/* ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 
 echo "Updating ~/.zshrc"
 sed -i 's/^ZSH_THEME=".*"$/ZSH_THEME="fino-time-mod"/g' ~/.zshrc
