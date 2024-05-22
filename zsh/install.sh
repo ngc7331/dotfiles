@@ -42,8 +42,12 @@ echo "Installing customs"
 cp -r ./custom/* ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 
 echo "Updating ~/.zshrc"
-sed -i 's/^ZSH_THEME=".*"$/ZSH_THEME="fino-time-mod"/g' ~/.zshrc
-sed -i 's/^plugins=\(.*\)$/plugins=(cp git gpg-agent timer)/g' ~/.zshrc
+if [ -f ~/.zshrc ]; then
+  BAK=~/.zshrc.bak.$(date +%Y%m%d%H%M%S)
+  echo "Backing up existing ~/.zshrc to ${BAK}"
+  mv ~/.zshrc ${BAK}
+fi
+cp ./.zshrc ~/.zshrc
 
 echo "Done"
 echo
