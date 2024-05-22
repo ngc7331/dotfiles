@@ -13,6 +13,7 @@
 # Also borrowing from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
 ZSH_THEME_COLOR_USER=033
+ZSH_THEME_COLOR_USER_ROOT=160
 ZSH_THEME_COLOR_HOST=033
 ZSH_THEME_COLOR_PATH=034
 ZSH_THEME_COLOR_TIME=239
@@ -30,6 +31,7 @@ function __color {
 }
 
 function user_prompt_info {
+    [[ $UID -eq 0 ]] && echo " $(__color ${ZSH_THEME_COLOR_USER_ROOT} '%n')" && return
     echo " $(__color ${ZSH_THEME_COLOR_USER} '%n')"
 }
 
