@@ -1,9 +1,41 @@
 #!/bin/bash
 
+set -e
+
+AUTO=${AUTO:-}
+
+if [ ! "$(which zsh)" ]; then 
+  if [ ! "${AUTO}" ]; then
+    echo "zsh is not installed"
+    echo "Please install zsh before running this script"
+    echo "Or set AUTO=1 to try install zsh automatically"
+    exit 1
+  fi
+
+  echo "Installing zsh"
+  if [ "$(which apt)" ]; then
+    sudo apt install zsh
+  elif [ "$(which dnf)" ]; then
+    sudo dnf install zsh
+  elif [ "$(which yum)" ]; then
+    sudo yum install zsh
+  else
+    echo "Unsupported OS, please install zsh manually"
+    exit 1
+  fi
+fi
+
 if [ ! -d ~/.oh-my-zsh  ]; then
-  echo "oh-my-zsh is not installed"
-  echo "See https://ohmyz.sh/#install for installation instructions"
-  exit 1
+  if [ ! "${AUTO}" ]; then
+    echo "oh-my-zsh is not installed"
+    echo "Please install oh-my-zsh before running this script"
+    echo "See https://ohmyz.sh/#install for installation instructions"
+    echo "Or set AUTO=1 to try install oh-my-zsh automatically"
+    exit 1
+  fi
+
+  echo "Installing oh-my-zsh"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 echo "Installing customs"
