@@ -65,7 +65,7 @@ function code_prompt_info {
     echo "%(?.. $(__color 160 '%? ⨯'))"
 }
 
-PROMPT="\
+PROMPT="
 ╭─\$(user_prompt_info)\$(host_prompt_info)\$(path_prompt_info)\$(git_prompt_info)\$(pyvenv_prompt_info)\$(time_prompt_info)
 ╰─\$(prompt_char) "
 
