@@ -41,13 +41,17 @@ fi
 echo "Installing customs"
 cp -r ./custom/* ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 
-echo "Updating ~/.zshrc"
-if [ -f ~/.zshrc ]; then
-  BAK=~/.zshrc.bak.$(date +%Y%m%d%H%M%S)
-  echo "Backing up existing ~/.zshrc to ${BAK}"
-  mv ~/.zshrc ${BAK}
+if [ "$(diff ./.zshrc ~/.zshrc)" ]; then
+  echo "Updating ~/.zshrc"
+  if [ -f ~/.zshrc ]; then
+    BAK=~/.zshrc.bak.$(date +%Y%m%d%H%M%S)
+    echo "Backing up existing ~/.zshrc to ${BAK}"
+    mv ~/.zshrc ${BAK}
+  fi
+  cp ./.zshrc ~/.zshrc
+else
+  echo "No need to update ~/.zshrc"
 fi
-cp ./.zshrc ~/.zshrc
 
 echo "Done"
 echo
