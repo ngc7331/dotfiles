@@ -7,7 +7,7 @@ ENABLE_SSH=${ENABLE_SSH:-true}
 ENABLE_FAIL2BAN=${ENABLE_FAIL2BAN:-true}
 ENABLE_DOCKER=${ENABLE_DOCKER:-false}
 ENABLE_TAILSCALE=${ENABLE_TAILSCALE:-false}
-USER=${USER:-}
+NEWUSER=${NEWUSER:-}
 
 PACKAGES=(ca-certificates curl)
 SERVICES=()
@@ -30,20 +30,20 @@ fi
 
 # stages
 create_user() {
-  if [ ! -z "$(cat /etc/passwd | grep ${USER})" ]; then
-    info "User ${USER} already exists"
-    return
+  if [ ! -z "$(cat /etc/passwd | grep ${NEWUSER})" ]; then
+    info "User ${NEWUSER} already exists, skip creating user"
+  else
+    info "Creating user: ${NEWUSER}"
+    adduser ${NEWUSER}
   fi
-  info "Creating user: ${USER}"
-  adduser ${USER}
 }
 
 add_user_group() {
   info "Adding user to sudo group"
-  usermod -aG sudo ${USER}
+  usermod -aG sudo ${NEWUSER}
   if [ ! -z "$(cat /etc/group | grep docker)" ]; then
     info "Adding user to docker group"
-    usermod -aG docker ${USER}
+    usermod -aG docker ${NEWUSER}
   fi
 }
 
@@ -111,8 +111,8 @@ remove_root_password() {
 }
 
 # pre-checks
-if [ -z "$USER" ]; then
-  fatal "USER is not set"
+if [ -z "$NEWUSER" ]; then
+  fatal "NEWUSER is not set"
 fi
 if [ $(id -u) -ne 0 ]; then
   fatal "Please run as root"
