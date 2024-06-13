@@ -13,6 +13,6 @@ else
   docker network create \
     --subnet 172.${SUBNET}.0.0/16 --gateway 172.${SUBNET}.0.1 \
     --ipv6 --subnet fd${SUBNET}::/80 --gateway fd${SUBNET}::1 \
-    -o com.docker.network.bridge.name=docker-${NAME} \
+    -o com.docker.network.bridge.name=${NAME} \
     ${NAME}
 fi
