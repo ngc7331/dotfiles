@@ -1,5 +1,21 @@
 #!/bin/bash
 
+USAGE='''
+USAGE:
+$ OPTION=value ./install.sh
+or
+$ export OPTION=value
+$ ./install.sh
+
+OPTIONS:
+  NEWUSER: username to create
+  ENABLE_SSH: enable SSH server (default: true)
+  ENABLE_SSH_KEYGEN: generate SSH key for NEWUSER (default: false), if false, will prompt for public key
+  ENABLE_FAIL2BAN: enable fail2ban (default: true)
+  ENABLE_DOCKER: enable docker (default: false)
+  ENABLE_TAILSCALE: enable tailscale (default: false)
+'''
+
 set -e
 source utils.sh
 

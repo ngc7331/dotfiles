@@ -13,5 +13,8 @@ error() {
 
 fatal() {
   echo -e "\e[31m[colorful] $1\e[0m"
+  if [ ! -z "$USAGE" ]; then
+    echo "$USAGE"
+  fi
   exit 1
 }
