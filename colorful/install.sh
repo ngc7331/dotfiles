@@ -4,6 +4,7 @@ set -e
 source utils.sh
 
 ENABLE_SSH=${ENABLE_SSH:-true}
+ENABLE_SSH_KEYGEN=${ENABLE_SSH_KEYGEN:-false}
 ENABLE_FAIL2BAN=${ENABLE_FAIL2BAN:-true}
 ENABLE_DOCKER=${ENABLE_DOCKER:-false}
 ENABLE_TAILSCALE=${ENABLE_TAILSCALE:-false}
@@ -44,6 +45,30 @@ add_user_group() {
   if [ ! -z "$(cat /etc/group | grep docker)" ]; then
     info "Adding user to docker group"
     usermod -aG docker ${NEWUSER}
+  fi
+}
+
+configure_sshkey() {
+  info "Configuring SSH key"
+  if [ "$ENABLE_SSH_KEYGEN" = "true" ]; then
+    if [ -f /home/${NEWUSER}/.ssh/id_ed25519 ]; then
+      warn " -> SSH key already exist at /home/${NEWUSER}/.ssh/id_ed25519, skip generating new key"
+    else
+      info " -> Generating SSH keys to /home/${NEWUSER}/.ssh/id_ed25519"
+      sudo -u ${NEWUSER} ssh-keygen -t ed25519 -C "${NEWUSER}@$(hostname)" -f /home/${NEWUSER}/.ssh/id_ed25519 -N ""
+    fi
+    PUBKEY=$(cat /home/${NEWUSER}/.ssh/id_ed25519.pub)
+  else
+    read -p "Enter your public key(enter to skip): " PUBKEY
+  fi
+
+  if [ -z "$PUBKEY" ]; then
+    warn " -> No public key provided, skip adding public key to authorized_keys"
+  else
+    info " -> Adding public key to authorized_keys"
+    echo ${PUBKEY} >> /home/${NEWUSER}/.ssh/authorized_keys
+    chown ${NEWUSER}:${NEWUSER} /home/${NEWUSER}/.ssh/authorized_keys
+    chmod 600 /home/${NEWUSER}/.ssh/authorized_keys
   fi
 }
 
@@ -123,6 +148,7 @@ fi
 
 create_user
 add_user_group
+configure_sshkey
 install_packages
 install_config
 reload_systemd
