@@ -128,12 +128,8 @@ install_packages() {
 install_config() {
   info "Installing config files"
   for FILE in ${CONFIG_FILES[@]}; do
-    if [ -f ${FILE} ]; then
-      info "-> ${FILE} already exists, skipping"
-    else
-      info "-> installing ${FILE}"
-      cp .${FILE} ${FILE}
-    fi
+    info "-> installing ${FILE}"
+    cp -i .${FILE} ${FILE} || info " -> ${FILE} already exists, skip"
   done
 }
 
