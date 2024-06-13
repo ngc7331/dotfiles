@@ -14,7 +14,7 @@ SERVICES=()
 CONFIG_FILES=()
 if [ "$ENABLE_SSH" = "true" ]; then
   PACKAGES+=(openssh-server)
-  SERVICES+=(sshd)
+  SERVICES+=(ssh)
   CONFIG_FILES+=(/etc/ssh/sshd_config.d/00-colorful.conf)
 fi
 if [ "$ENABLE_FAIL2BAN" = "true" ]; then
