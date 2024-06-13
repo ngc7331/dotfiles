@@ -5,6 +5,7 @@ source utils.sh
 
 MIRROR=${MIRROR:-docker.io/}
 VERSION=${VERSION:-latest}
+NETWORK=${NETWORK:-colorful-br}
 
 DIST=${DIST:-agent}
 
@@ -16,7 +17,7 @@ if [ "$DIST" == "agent" ]; then
   docker run -d \
     --name portainer_agent \
     --restart=always \
-    --network=br \
+    --network=${NETWORK} \
     -p 9001:9001 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/docker/volumes:/var/lib/docker/volumes \
@@ -29,7 +30,7 @@ elif [ "$DIST" == "ce" ] || [ "$DIST" == "ee" ]; then
   docker run -d \
     --name portainer \
     --restart=always \
-    --network=br \
+    --network=${NETWORK} \
     -p 8000:8000 \
     -p 9443:9443 \
     -v /var/run/docker.sock:/var/run/docker.sock \
