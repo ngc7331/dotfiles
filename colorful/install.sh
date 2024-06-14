@@ -88,6 +88,16 @@ configure_sshkey() {
   fi
 }
 
+configure_ufw() {
+  info "Configuring UFW"
+  ufw allow 22/tcp
+  ufw default deny incoming
+  ufw default allow outgoing
+  ufw default allow routed
+  ufw enable
+  info " -> UFW enabled, only 22/tcp is allowed by default, run 'ufw allow <port>/<proto>' to open more ports"
+}
+
 install_packages() {
   info "Installing packages: ${PACKAGES[@]}"
   apt update
@@ -160,6 +170,7 @@ fi
 
 create_user
 configure_sshkey
+configure_ufw
 install_packages
 install_config
 add_user_group
