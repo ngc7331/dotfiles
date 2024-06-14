@@ -6,7 +6,7 @@ source utils.sh
 NAME=${NAME:-colorful-br}
 SUBNET=${SUBNET:-21}
 
-if [ "$(docker network inspect ${NAME})" != "[]" ]; then
+if [ "$(docker network inspect ${NAME} 2>/dev/null)" != "[]" ]; then
   info "Network ${NAME} already exists"
 else
   info "Creating network ${NAME}"
