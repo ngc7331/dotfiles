@@ -58,7 +58,7 @@ create_user() {
 add_user_group() {
   info "Adding user to sudo group"
   usermod -aG sudo ${NEWUSER}
-  if [ ! -z "$(cat /etc/group | grep docker)" ]; then
+  if [ "$ENABLE_DOCKER" = "true" ]; then
     info "Adding user to docker group"
     usermod -aG docker ${NEWUSER}
   fi
@@ -159,9 +159,9 @@ if [ ! -f /etc/os-release ] || [ "$(cat /etc/os-release | grep -i ubuntu)" == ""
 fi
 
 create_user
-add_user_group
 configure_sshkey
 install_packages
 install_config
+add_user_group
 reload_systemd
 remove_root_password
