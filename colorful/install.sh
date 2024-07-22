@@ -82,6 +82,9 @@ configure_sshkey() {
     warn " -> No public key provided, skip adding public key to authorized_keys"
   else
     info " -> Adding public key to authorized_keys"
+    mkdir -p /home/${NEWUSER}/.ssh
+    chown ${NEWUSER}:${NEWUSER} /home/${NEWUSER}/.ssh
+    chmod 700 /home/${NEWUSER}/.ssh
     echo ${PUBKEY} >> /home/${NEWUSER}/.ssh/authorized_keys
     chown ${NEWUSER}:${NEWUSER} /home/${NEWUSER}/.ssh/authorized_keys
     chmod 600 /home/${NEWUSER}/.ssh/authorized_keys
