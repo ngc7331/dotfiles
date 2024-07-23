@@ -12,8 +12,7 @@ DIST=${DIST:-agent}
 if [ "$DIST" == "agent" ]; then
   info "Installing portainer-agent"
   docker pull "$MIRROR"portainer/agent:"$VERSION" || fatal "Pull failed"
-  docker stop portainer_agent
-  docker rm portainer_agent
+  docker stop portainer_agent && docker rm portainer_agent && info "Old container removed" || info "Fresh install"
   docker run -d \
     --name portainer_agent \
     --restart=always \
@@ -25,8 +24,7 @@ if [ "$DIST" == "agent" ]; then
 elif [ "$DIST" == "ce" ] || [ "$DIST" == "ee" ]; then
   info "Installing portainer-$DIST"
   docker pull "$MIRROR"portainer/portainer-"$DIST":"$VERSION" || fatal "Pull failed"
-  docker stop portainer
-  docker rm portainer
+  docker stop portainer && docker rm portainer && info "Old container removed" || info "Fresh install"
   docker run -d \
     --name portainer \
     --restart=always \
