@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-source utils.sh
+source $(dirname $0)/../utils.sh
 
 MIRROR=${MIRROR:-docker.io/}
 VERSION=${VERSION:-latest}
