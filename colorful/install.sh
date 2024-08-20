@@ -12,6 +12,7 @@ OPTIONS:
   ENABLE_SSH: enable SSH server (default: true)
   ENABLE_SSH_KEYGEN: generate SSH key for NEWUSER (default: false), if false, will prompt for public key
   ENABLE_FAIL2BAN: enable fail2ban (default: true)
+  ENABLE_UFW: enable UFW (default: true), this is ignored if distro is Ubuntu (which has UFW installed by default)
   ENABLE_DOCKER: enable docker (default: false)
   ENABLE_TAILSCALE: enable tailscale (default: false)
 '''
@@ -22,6 +23,7 @@ source utils.sh
 ENABLE_SSH=${ENABLE_SSH:-true}
 ENABLE_SSH_KEYGEN=${ENABLE_SSH_KEYGEN:-false}
 ENABLE_FAIL2BAN=${ENABLE_FAIL2BAN:-true}
+ENABLE_UFW=${ENABLE_UFW:-true}
 ENABLE_DOCKER=${ENABLE_DOCKER:-false}
 ENABLE_TAILSCALE=${ENABLE_TAILSCALE:-false}
 NEWUSER=${NEWUSER:-}
@@ -38,6 +40,9 @@ if [ "$ENABLE_FAIL2BAN" = "true" ]; then
   PACKAGES+=(fail2ban)
   SERVICES+=(fail2ban)
   CONFIG_FILES+=(/etc/fail2ban/jail.d/00-colorful.conf)
+fi
+if [ "$ENABLE_UFW" = "true" ]; then
+  PACKAGES+=(ufw)
 fi
 if [ "$ENABLE_DOCKER" = "true" ]; then
   # use a standalone
@@ -106,6 +111,10 @@ install_packages() {
   apt update
   apt install -y ${PACKAGES[@]}
 
+  if [ "$ENABLE_UFW" = "true" ]; then
+    configure_ufw
+  fi
+
   if [ "$ENABLE_DOCKER" = "true" ]; then
     # Borrowed from https://docs.docker.com/engine/install/ubuntu/
     # Add Docker's official GPG key:
@@ -167,13 +176,16 @@ fi
 if [ $(id -u) -ne 0 ]; then
   fatal "Please run as root"
 fi
-if [ ! -f /etc/os-release ] || [ "$(cat /etc/os-release | grep -i ubuntu)" == "" ]; then
-  fatal "Only Ubuntu is supported"
+if [ ! -z $(which apt) ]; then
+  fatal "Only apt based distros are supported"
+fi
+if [ ! -z $(which ufw) ]; then
+  info "UFW is detected, forcing ENABLE_UFW=true"
+  ENABLE_UFW=true
 fi
 
 create_user
 configure_sshkey
-configure_ufw
 install_packages
 install_config
 add_user_group
