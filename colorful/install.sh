@@ -176,7 +176,7 @@ fi
 if [ $(id -u) -ne 0 ]; then
   fatal "Please run as root"
 fi
-if [ ! -z $(which apt) ]; then
+if [ -z $(which apt) ]; then
   fatal "Only apt based distros are supported"
 fi
 if [ ! -z $(which ufw) ]; then
