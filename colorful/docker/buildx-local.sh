@@ -3,18 +3,28 @@
 set -e
 source $(dirname $0)/../utils.sh
 
+SERVER=${SERVER:-localhost}
+BUILDER_NAME=${BUILDER_NAME:-local}
+
+dotenv $(dirname $0)/.env.buildx
+
 DOCKERDIR=$(realpath ~/.docker)
 CONFDIR=${DOCKERDIR}/buildkit
 CERTDIR=${CONFDIR}/.certs
-SERVER=${SERVER:-localhost}
-NAME=${NAME:-local}
+
+info "Installing buildx local builder"
+info "SERVER=${SERVER}"
+info "BUILDER_NAME=${BUILDER_NAME}"
+debug "DOCKERDIR=${DOCKERDIR}"
+debug "CONFDIR=${CONFDIR}"
+debug "CERTDIR=${CERTDIR}"
 
 info "Creating buildx builder"
 docker buildx create \
-  --name ${NAME} \
+  --name "${BUILDER_NAME}" \
   --driver remote \
-  --driver-opt cacert=${CERTDIR}/client/ca.pem,cert=${CERTDIR}/client/cert.pem,key=${CERTDIR}/client/key.pem,servername=${SERVER} \
-  tcp://${SERVER}:1234
+  --driver-opt cacert="${CERTDIR}/client/ca.pem,cert=${CERTDIR}/client/cert.pem,key=${CERTDIR}/client/key.pem,servername=${SERVER}" \
+  "tcp://${SERVER}:1234"
 
 info "Setting ${NAME} builder as default"
-docker buildx use ${NAME}
+docker buildx use "${NAME}"

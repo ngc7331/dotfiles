@@ -1,10 +1,13 @@
 #!/bin/bash
 
-USAGE='''
+__COLORFUL_USAGE='''
 USAGE:
 $ OPTION=value ./install.sh
 or
 $ export OPTION=value
+$ ./install.sh
+or
+$ echo "OPTION=value" > .env
 $ ./install.sh
 
 OPTIONS:
@@ -27,6 +30,8 @@ ENABLE_UFW=${ENABLE_UFW:-true}
 ENABLE_DOCKER=${ENABLE_DOCKER:-false}
 ENABLE_TAILSCALE=${ENABLE_TAILSCALE:-false}
 NEWUSER=${NEWUSER:-}
+
+dotenv .env
 
 PACKAGES=(ca-certificates curl)
 SERVICES=()
@@ -183,6 +188,18 @@ if [ ! -z $(which ufw) ]; then
   info "UFW is detected, forcing ENABLE_UFW=true"
   ENABLE_UFW=true
 fi
+
+info "Starting installation"
+info "NEWUSER=${NEWUSER}"
+info "ENABLE_SSH=${ENABLE_SSH}"
+info "ENABLE_SSH_KEYGEN=${ENABLE_SSH_KEYGEN}"
+info "ENABLE_FAIL2BAN=${ENABLE_FAIL2BAN}"
+info "ENABLE_UFW=${ENABLE_UFW}"
+info "ENABLE_DOCKER=${ENABLE_DOCKER}"
+info "ENABLE_TAILSCALE=${ENABLE_TAILSCALE}"
+debug "PACKAGES=${PACKAGES[@]}"
+debug "SERVICES=${SERVICES[@]}"
+debug "CONFIG_FILES=${CONFIG_FILES[@]}"
 
 create_user
 configure_sshkey
