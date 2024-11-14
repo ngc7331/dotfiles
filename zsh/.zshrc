@@ -72,7 +72,7 @@ zstyle ':omz:update' frequency 14
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(common-aliases git gpg-agent timer)
+plugins=(common-aliases git gpg-agent timer dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
