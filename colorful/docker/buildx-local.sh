@@ -26,5 +26,5 @@ docker buildx create \
   --driver-opt cacert="${CERTDIR}/client/ca.pem,cert=${CERTDIR}/client/cert.pem,key=${CERTDIR}/client/key.pem,servername=${SERVER}" \
   "tcp://${SERVER}:1234"
 
-info "Setting ${NAME} builder as default"
-docker buildx use "${NAME}"
+info "Setting ${BUILDER_NAME} builder as default"
+docker buildx use "${BUILDER_NAME}"
