@@ -169,9 +169,11 @@ reload_systemd() {
   done
 }
 
-remove_root_password() {
-  info "Removing root password"
-  passwd -d root
+reset_root_password() {
+  info "Resetting root password"
+  local PASSWORD=$(openssl rand -base64 24)
+  echo "root:${PASSWORD}" | chpasswd
+  info " -> root password reset to ${PASSWORD}"
 }
 
 # pre-checks
@@ -207,4 +209,4 @@ install_packages
 install_config
 add_user_group
 reload_systemd
-remove_root_password
+reset_root_password
