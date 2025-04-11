@@ -7,6 +7,7 @@ DIST=${DIST:-agent}
 MIRROR=${MIRROR:-docker.io}
 VERSION=${VERSION:-latest}
 NETWORK=${NETWORK:-colorful-br}
+PORTAINER_EXTRA_ARGS=${PORTAINER_EXTRA_ARGS:-}
 
 dotenv $(dirname $0)/.env.portainer
 
@@ -26,6 +27,7 @@ if [ "${DIST}" == "agent" ]; then
     -p 9001:9001 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/docker/volumes:/var/lib/docker/volumes \
+    ${PORTAINER_EXTRA_ARGS} \
     "${MIRROR}/portainer/agent:${VERSION}"
 elif [ "${DIST}" == "ce" ] || [ "${DIST}" == "ee" ]; then
   docker pull "${MIRROR}/portainer/portainer-${DIST}:${VERSION}" || fatal "Pull failed"
@@ -38,6 +40,7 @@ elif [ "${DIST}" == "ce" ] || [ "${DIST}" == "ee" ]; then
     -p 9443:9443 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v portainer_data:/data \
+    ${PORTAINER_EXTRA_ARGS} \
     "${MIRROR}/portainer/portainer-${DIST}:${VERSION}"
 else
   fatal "Invalid DIST=${DIST}, select from [agent, ce, ee]"
