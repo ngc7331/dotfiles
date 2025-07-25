@@ -4,7 +4,7 @@ set -e
 
 AUTO=${AUTO:-}
 
-if [ ! "$(which zsh)" ]; then 
+if [ ! "$(which zsh)" ]; then
   if [ ! "${AUTO}" ]; then
     echo "zsh is not installed"
     echo "Please install zsh before running this script"
