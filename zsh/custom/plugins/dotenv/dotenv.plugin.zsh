@@ -1,10 +1,15 @@
 dotvenv() {
-    if [ -f ".venv/bin/activate" ]; then
-        source .venv/bin/activate
-    else
-        echo ".venv/bin/activate not found"
-        echo "maybe you need to run 'python3 -m venv .venv' to create it?"
+    if [ ! -f ".venv/bin/activate" ]; then
+        echo ".venv/bin/activate not found, trying to create a new virtualenv..."
+        echo "Running 'python3 -m venv .venv', continue? (y/n)"
+        read -r answer
+        if [ "$answer" != "y" ]; then
+            echo "Aborting."
+            return 1
+        fi
+        python3 -m venv .venv
     fi
+    source .venv/bin/activate
 }
 
 dotconda() {
